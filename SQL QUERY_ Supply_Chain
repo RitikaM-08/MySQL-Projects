@@ -1,0 +1,49 @@
+--Top 5 suppliers with the highest quantity ordered:
+
+SELECT s.supplier_id, s.supplier_name, SUM(o.quantity_ordered) AS total_quantity_ordered 
+FROM Suppliers s
+JOIN Orders o ON s.supplier_id = o.supplier_id 
+GROUP BY s.supplier_id 
+ORDER BY total_quantity_ordered DESC 
+LIMIT 5;
+
+
+
+-- Average deliver time for each shipping company:
+SELECT shipping_company, AVG(DATEDIFF(delivery_date, shipment_date)) AS average_delivery_time
+FROM Shipments
+GROUP BY shipping_company;
+
+
+
+-- Seasonal demand patterns:
+SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month,
+    SUM(quantity_ordered) AS total_quantity_ordered
+FROM 
+    Orders
+GROUP BY 
+    DATE_FORMAT(order_date, '%Y-%m')
+ORDER BY 
+    month;
+
+
+-- Forecast Future Demand:
+
+SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month,
+    SUM(quantity_ordered) AS total_quantity_ordered
+FROM 
+    Orders
+WHERE 
+    order_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 6 MONTH)
+GROUP BY 
+    DATE_FORMAT(order_date, '%Y-%m')
+ORDER BY 
+    month;
+
+
+-- Total number of orders made each month:
+SELECT DATE_FORMAT(order_date, '%Y-%m') AS month, COUNT(*) AS total_orders
+FROM Orders
+GROUP BY DATE_FORMAT(order_date, '%Y-%m');
