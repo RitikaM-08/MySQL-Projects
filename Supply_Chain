@@ -1,0 +1,20 @@
+-- Display orders that are in progress:
+
+SELECT * FROM Orders WHERE order_status = 'In Progress';
+
+-- Earliest and the latest order dates:
+
+SELECT MIN(order_date) AS earliest_order_date, MAX(order_date) AS latest_order_date 
+FROM Orders;
+
+-- Total revenue generated from orders:
+
+SELECT SUM(p.unit_price * o.quantity_ordered) AS total_revenue 
+FROM Orders o
+JOIN Products p ON o.product_id = p.product_id;
+
+-- Suppliers who have not made any orders yet:
+SELECT s.* 
+FROM Suppliers s
+LEFT JOIN Orders o ON s.supplier_id = o.supplier_id 
+WHERE o.supplier_id IS NULL;
